@@ -126,7 +126,7 @@ def process_video(video_path):
         # --- YOLO tahmin: kutu sayısını kontrol et ---
         results = model.predict(
             source=resized_frame,
-            classes=None,
+            classes=[0],
             conf=0.25,
             iou=0.40,
             imgsz=640,
