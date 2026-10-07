@@ -22,9 +22,7 @@ YOLOv8 Person Counting detects people in uploaded videos, analyzes each processe
 
 YOLOv8 Person Counting is a computer vision project developed to demonstrate person detection and video analysis.
 
-The application accepts an uploaded video, processes its frames using a pretrained YOLOv8 model, and generates an annotated output video. Detection is restricted to the `person` class.
-
-The project also contains an experimental color-based categorization method that analyzes clothing colors using the HSV color space.
+The application accepts an uploaded video, processes its frames using a pretrained YOLOv8 model, and generates an annotated output video. Detection is restricted to the `person` class, and ByteTrack follows each person across frames so that every individual is counted once.
 
 > This project was developed for educational and internship purposes. It is not intended for surveillance, biometric identification, or real-world demographic analysis.
 
@@ -50,13 +48,14 @@ The project also contains an experimental color-based categorization method that
 - Detects people in uploaded videos
 - Uses a pretrained YOLOv8 model
 - Restricts detection to the `person` class
-- Draws bounding boxes around detected people
-- Displays the number of detected people in each processed frame
+- Tracks people across frames with ByteTrack
+- Counts unique individuals across the whole video
+- Draws bounding boxes and track IDs around detected people
+- Displays the current and total person counts on each processed frame
 - Produces an annotated MP4 output video
 - Presents results through a Gradio interface
 - Creates a summary table using Pandas
 - Uses frame sampling to improve processing performance
-- Includes experimental HSV-based color analysis
 
 ---
 
@@ -65,8 +64,8 @@ The project also contains an experimental color-based categorization method that
 1. The user uploads an MP4 video through the Gradio interface.
 2. OpenCV reads and processes the video frames.
 3. YOLOv8 detects people in each processed frame.
-4. Bounding boxes are drawn around detected people.
-5. The upper and lower clothing regions are analyzed in the HSV color space.
+4. ByteTrack assigns each person a track ID that stays the same across frames.
+5. Bounding boxes and track IDs are drawn around detected people.
 6. The processed frames are written to a new video file.
 7. The annotated video and a summary table are returned to the user.
 
@@ -78,6 +77,7 @@ The project also contains an experimental color-based categorization method that
 |---|---|
 | Python | Core application language |
 | YOLOv8 | Person detection |
+| ByteTrack | Multi-object tracking |
 | OpenCV | Video processing and annotation |
 | Gradio | Web-based user interface |
 | PyTorch | Deep-learning runtime |
@@ -159,42 +159,35 @@ The pretrained `yolov8n.pt` model may be downloaded automatically during the fir
 
 ## 📊 Output
 
+![Example output](images/ornek_cikti.png)
+
 The application returns:
 
 - An annotated output video
-- Frame-based category counts
-- Percentage values for the displayed categories
-- A summary table generated with Pandas
+- A summary table generated with Pandas, containing:
+  - the number of unique people in the video
+  - the highest number of people seen in a single frame
 
 Generated videos are saved inside the automatically created `outputs/` directory.
-
-The summary table represents the results from the final processed frame. The application does not currently track unique individuals throughout the entire video.
 
 ---
 
 ## ⚠️ Important Limitations
 
-The color-based category estimation used in this project is a simple experimental heuristic.
+Unique counts depend on the tracker keeping the same ID for each person. Results may be affected by:
 
-It uses red, pink, and blue color ratios found in clothing regions. It does not recognize a person’s actual gender and must not be treated as a reliable demographic classification system.
-
-Results may be affected by:
-
-- Clothing colors
+- Occlusion (people hiding behind each other or objects)
+- People leaving and re-entering the frame, which can give them a new ID
 - Lighting conditions
 - Video quality
 - Camera angle
 - Partially visible people
 - Object-detection errors
 
-The application performs frame-based detection. A person appearing in multiple frames is not counted as one unique individual across the entire video.
-
 ---
 
 ## 🔮 Future Improvements
 
-- Add multi-object tracking for unique person counting
-- Remove or replace the color-based categorization method
 - Add configurable confidence thresholds
 - Improve video processing speed
 - Support additional video formats

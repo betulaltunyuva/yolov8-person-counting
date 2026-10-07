@@ -1,4 +1,5 @@
 gradio==6.0.1
+lapx==0.10.0
 numpy==1.26.4
 opencv-python==4.7.0.72
 pandas==2.3.3
