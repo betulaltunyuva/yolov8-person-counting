@@ -11,15 +11,17 @@ RESIZE_DIV        = 6          # videoyu 1/6 ölçekte işle (hız)
 FRAME_STEP        = 2          # her 2 kareden birini işle (hız)
 # ==========================================================================
 
-model = YOLO("yolov8n.pt")
- # istersen 'best.pt'
+# Kendi veri setimle eğittiğim model (YOLO26n tabanlı, tek sınıf: person)
+MODEL_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "models", "best.pt")
+
+model = YOLO(MODEL_PATH)
 print("Model Sınıfları:", model.names)
 
 def process_video(video_path):
     cap = cv2.VideoCapture(video_path)
     if not cap.isOpened():
         print("Video açılamadı.")
-        return None, None
+        return None, 0, 0
 
     width  = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))  // RESIZE_DIV
     height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT)) // RESIZE_DIV
@@ -45,10 +47,10 @@ def process_video(video_path):
     out = make_writer(output_path, fps / FRAME_STEP, width, height)
     if out is None:
         print("[HATA] VideoWriter açılamadı (codec bulunamadı).")
-        return None, None
+        return None, 0, 0
 
     # Her video için yeni model: takipçi önceki videodan ID taşımasın.
-    tracker_model = YOLO("yolov8n.pt")
+    tracker_model = YOLO(MODEL_PATH)
 
     frame_count = 0
     unique_ids = set()   # videoda görülen farklı kişilerin takip ID'leri
@@ -121,7 +123,7 @@ def process_video(video_path):
     time.sleep(0.5)
 
     if not os.path.exists(output_path) or os.path.getsize(output_path) < 1000:
-        return None, None
+        return None, 0, 0
 
     return output_path, len(unique_ids), max_in_frame
 
@@ -159,8 +161,8 @@ demo = gr.Interface(
         gr.Video(label="İşlenmiş Video", autoplay=True, loop=True),
         gr.Dataframe(label="Kişi Sayımı", interactive=False)
     ],
-    title="YOLOv8 Kişi Sayımı",
-    description="YOLO ile kişi tespiti, ByteTrack ile takip. Her kişi videoda bir kez sayılır."
+    title="Kişi Sayımı (Özel Eğitilmiş YOLO26n)",
+    description="Kendi veri setimle eğittiğim YOLO26n modeli ile kişi tespiti, ByteTrack ile takip. Her kişi videoda bir kez sayılır."
 )
 
 
