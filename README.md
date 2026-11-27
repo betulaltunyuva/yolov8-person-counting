@@ -26,7 +26,7 @@
 <td align="center" width="25%"><h2>160</h2>hand-labeled images</td>
 <td align="center" width="25%"><h2>6,306</h2>person annotations</td>
 <td align="center" width="25%"><h2>0.885</h2>test mAP50</td>
-<td align="center" width="25%"><h2>2×</h2>recall vs. pretrained model</td>
+<td align="center" width="25%"><h2>2×</h2>higher recall</td>
 </tr>
 </table>
 
@@ -65,7 +65,7 @@ Off-the-shelf detectors struggle in **dense crowds**, where people are small, fa
 The same test image, the same confidence threshold (0.25), two different models:
 
 <p align="center">
-  <img src="images/comparison.jpg" width="760" alt="Pretrained COCO model finds 5 people, the fine-tuned model finds 67">
+  <img src="images/comparison.jpg" width="560" alt="Pretrained COCO model finds 5 people, the fine-tuned model finds 67">
   <br><sub>This frame contains <b>67</b> labeled people. The pretrained model only finds the 5 largest people in the front.</sub>
 </p>
 
@@ -81,13 +81,19 @@ Across the whole test split, fine-tuning **doubled recall** (0.39 → 0.80) and 
 
 ```mermaid
 flowchart LR
-    A[🎞️ Crowd videos] -->|extract_frames.py| B[160 frames]
-    B -->|Roboflow| C[🏷️ Labeled dataset<br/>6,306 boxes]
-    C -->|train.py| D[🧠 Fine-tuned<br/>YOLO26n · best.pt]
-    D --> E[🖥️ Gradio app]
-    E --> F[Detect people<br/>in each frame]
-    F --> G[Track with<br/>ByteTrack]
-    G --> H[🔢 Count unique IDs]
+    subgraph T [" 🏋️ Training "]
+        direction TB
+        A[🎞️ Crowd videos] -->|extract_frames.py| B[160 frames]
+        B -->|Roboflow| C[🏷️ Labeled dataset<br/>6,306 boxes]
+        C -->|train.py| D[🧠 Fine-tuned YOLO26n<br/>models/best.pt]
+    end
+    subgraph P [" 🖥️ Application "]
+        direction TB
+        E[📤 Uploaded video] --> F[Detect people<br/>in each frame]
+        F --> G[Track with<br/>ByteTrack]
+        G --> H[🔢 Count unique IDs]
+    end
+    D -.-> F
 ```
 
 | Step | What happens |
