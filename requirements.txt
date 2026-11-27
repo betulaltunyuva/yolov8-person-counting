@@ -3,6 +3,6 @@ lapx==0.10.0
 numpy==1.26.4
 opencv-python==4.11.0.86
 pandas==2.3.3
-torch==2.1.0
-torchvision==0.16.0
+torch==2.14.1
+torchvision==0.29.1
 ultralytics==8.4.163

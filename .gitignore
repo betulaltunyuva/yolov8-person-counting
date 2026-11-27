@@ -21,3 +21,4 @@ videos/
 frames_raw/
 runs/
 yolo26n.pt
+*.cache
