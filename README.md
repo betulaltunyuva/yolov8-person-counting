@@ -93,7 +93,7 @@ flowchart LR
         F --> G[Track with<br/>ByteTrack]
         G --> H[🔢 Count unique IDs]
     end
-    D -.-> F
+    T ==>|best.pt| P
 ```
 
 | Step | What happens |
