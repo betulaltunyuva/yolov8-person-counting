@@ -9,7 +9,7 @@
 ![Roboflow](https://img.shields.io/badge/Roboflow-Annotation-6706CE?style=for-the-badge&logo=roboflow&logoColor=white)
 ![OpenCV](https://img.shields.io/badge/OpenCV-4.11-5C3EE8?style=for-the-badge&logo=opencv&logoColor=white)
 ![Gradio](https://img.shields.io/badge/Gradio-6.31-FF7C00?style=for-the-badge)
-![PyTorch](https://img.shields.io/badge/PyTorch-2.1-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white)
+![PyTorch](https://img.shields.io/badge/PyTorch-2.14-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white)
 
 <br>
 
