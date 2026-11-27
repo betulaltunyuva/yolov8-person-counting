@@ -1,0 +1,14 @@
+# Paths are resolved relative to this file's folder.
+train: train/images
+val: valid/images
+test: test/images
+
+nc: 1
+names: ['person']
+
+roboflow:
+  workspace: betul-zibcu
+  project: smart-human-counting-v2
+  version: 1
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/betul-zibcu/smart-human-counting-v2/dataset/1
